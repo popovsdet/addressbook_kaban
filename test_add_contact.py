@@ -1,11 +1,18 @@
-import unittest
+import pytest
 
-from selenium import webdriver
+from application import Application
+from contact import Contact
 
-from group import Group
+
+@pytest.fixture
+def app(request):
+    app = Application()
+    request.addfinalizer(app.tear_down)
+    return app
 
 
-class test_add_group(unittest.TestCase):
-    def setUp(self):
-        self.driver = webdriver.Chrome()
-        self.driver.implicitly_wait(3)
+def test_add_group(app):
+    app.login(username="admin", password="secret")
+    app.create_contact(Contact(fistname="fistname_1", lastname="lastname_1",
+                               address="address_1", mobile="mobile_1", email="email_1"))
+    app.logout()
