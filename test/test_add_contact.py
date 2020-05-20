@@ -1,14 +1,4 @@
-import pytest
-
-from fixture.application import Application
 from model.contact import Contact
-
-
-@pytest.fixture
-def app(request):
-    app = Application()
-    request.addfinalizer(app.tear_down)
-    return app
 
 
 def test_add_group(app):

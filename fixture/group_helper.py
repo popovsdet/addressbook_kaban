@@ -25,3 +25,11 @@ class GroupHelper:
 
     def open_groups_page(self):
         self.app.driver.find_element_by_link_text("groups").click()
+
+    def delete(self):
+        self.open_groups_page()
+        # select firs group
+        self.app.driver.find_element_by_xpath('//input[@name="selected[]"]').click()
+        # submit deletion
+        self.app.driver.find_element_by_xpath('//input[@name="delete"]').click()
+        self.return_to_groups_page()
