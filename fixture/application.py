@@ -1,26 +1,16 @@
 from selenium import webdriver
 
+from fixture.session_helper import SessionHelper
+
 
 class Application(object):
     def __init__(self):
         self.driver = webdriver.Chrome()
         self.driver.implicitly_wait(3)
+        self.session = SessionHelper(self)
 
     def open_home_page(self):
         self.driver.get("http://localhost/addressbook/")
-
-    def login(self, username, password):
-        self.open_home_page()
-        self.driver.find_element_by_name("user").click()
-        self.driver.find_element_by_name("user").clear()
-        self.driver.find_element_by_name("user").send_keys(username)
-        self.driver.find_element_by_name("pass").click()
-        self.driver.find_element_by_name("pass").clear()
-        self.driver.find_element_by_name("pass").send_keys(password)
-        self.driver.find_element_by_css_selector("input[type=\"submit\"]").click()
-
-    def logout(self):
-        self.driver.find_element_by_link_text("Logout").click()
 
     def return_to_groups_page(self):
         self.driver.find_element_by_link_text("group page").click()
