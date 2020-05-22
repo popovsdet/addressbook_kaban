@@ -19,3 +19,10 @@ class Application(object):
 
     def tear_down(self):
         self.driver.quit()
+
+    def is_valid(self):
+        try:
+            x = self.driver.current_url
+            return True
+        except:
+            return False
