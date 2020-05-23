@@ -3,7 +3,9 @@ class GroupHelper:
         self.app = app
 
     def return_to_groups_page(self):
-        self.app.driver.find_element_by_link_text("group page").click()
+        if not (self.app.driver.current_url.endswith("/group.php") and
+                self.app.driver.find_elements_by_name("new")):
+            self.app.driver.find_element_by_link_text("group page").click()
 
     def create(self, group):
         self.open_groups_page()
@@ -51,3 +53,7 @@ class GroupHelper:
         self.change_field_value(field_name="group_name", text=group.name)
         self.change_field_value(field_name="group_header", text=group.header)
         self.change_field_value(field_name="group_footer", text=group.footer)
+
+    def number(self):
+        self.open_groups_page()
+        return len(self.app.driver.find_elements_by_xpath('//input[@name="selected[]"]'))

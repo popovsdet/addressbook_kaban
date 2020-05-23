@@ -3,23 +3,67 @@ class ContactHelper:
         self.app = app
 
     def init_new_contact(self):
+        """
+        Init new contact creation
+        """
         self.app.driver.find_element_by_xpath('//a[text()="add new"]').click()
 
+    def fill_form(self, contact):
+        """
+        Fill form
+        :param contact: contact object
+        """
+        self.change_field_value(xpath='//input[@name="firstname"]', text=contact.fistname)
+        self.change_field_value(xpath='//input[@name="lastname"]', text=contact.lastname)
+        self.change_field_value(xpath='//textarea[@name="address"]', text=contact.address)
+        self.change_field_value(xpath='//input[@name="mobile"]', text=contact.mobile)
+        self.change_field_value(xpath='//input[@name="email"]', text=contact.email)
+
+    def change_field_value(self, xpath: str, text: str):
+        """
+        Change field value
+        :param xpath: xpath
+        :param text: text
+        """
+        if text is not None:
+            self.app.driver.find_element_by_xpath(xpath).click()
+            self.app.driver.find_element_by_xpath(xpath).clear()
+            self.app.driver.find_element_by_xpath(xpath).send_keys(text)
+
     def create(self, contact):
+        """
+        Create a contact
+        :param contact: contact object
+        """
         self.init_new_contact()
-        self.app.driver.find_element_by_xpath('//input[@name="firstname"]').send_keys(contact.fistname)
-        self.app.driver.find_element_by_xpath('//input[@name="lastname"]').send_keys(contact.lastname)
-        self.app.driver.find_element_by_xpath('//textarea[@name="address"]').send_keys(contact.address)
-        self.app.driver.find_element_by_xpath('//input[@name="mobile"]').send_keys(contact.mobile)
-        self.app.driver.find_element_by_xpath('//input[@name="email"]').send_keys(contact.email)
-        # Submit contact
+        self.fill_form(contact)
+        # Submit contact creation
         self.app.driver.find_element_by_xpath('//input[@name="submit"]').click()
         self.goto_home_page()
 
+    def modify(self, contact):
+        """
+        Modify contact
+        :param contact: contact object
+        """
+        self.goto_home_page()
+        # Go to edit contact page
+        self.app.driver.find_element_by_xpath('//img[@title="Edit"]').click()
+        self.fill_form(contact)
+        # Submit contact modification
+        self.app.driver.find_element_by_xpath('//input[@name="update"]').click()
+        self.goto_home_page()
+
     def goto_home_page(self):
+        """
+        Go to home page
+        """
         self.app.driver.find_element_by_xpath('//a[text()="home"]').click()
 
     def delete(self):
+        """
+        Delete contact
+        """
         self.goto_home_page()
         # Select fist contact
         self.app.driver.find_element_by_xpath('//input[@name="selected[]"]').click()
