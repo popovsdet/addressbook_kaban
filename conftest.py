@@ -1,33 +1,53 @@
+"""
+Fixtures
+"""
 import pytest
 
 from fixture.application import Application
 from model.group import Group
 
-fixture = None
+app_fixture = None
 
 
 @pytest.fixture(scope="function")
 def app():
-    global fixture
-    if fixture is None:
-        fixture = Application()
+    """
+    Before each test method:
+     1. Create an application fixture
+        - if it doesn't exist or
+        - if fixture doesn't valid (no opened browser)
+     2. Login
+    :return: app fixture
+    """
+    global app_fixture
+    if not app_fixture:
+        app_fixture = Application()
     else:
-        if not fixture.is_valid():
-            fixture = Application()
-    fixture.session.ensure_login(username="admin", password="secret")
-    return fixture
+        if not app_fixture.is_valid():
+            app_fixture = Application()
+    app_fixture.session.ensure_login(username="admin", password="secret")
+    return app_fixture
 
 
 @pytest.fixture(scope="session", autouse=True)
 def stop(request):
-    def fin():
-        fixture.session.ensure_logout()
-        fixture.tear_down()
+    """
+    Close session.
+    :param request: request
+    """
 
+    def fin():
+        app_fixture.session.ensure_logout()
+        app_fixture.tear_down()
+
+    # Run after last test
     request.addfinalizer(fin)
 
 
 @pytest.fixture(scope="function")
 def check_group():
-    if not fixture.group.number():
-        fixture.group.create(Group(name="test"))
+    """
+    Create a group if no one exists
+    """
+    if not app_fixture.group.number():
+        app_fixture.group.create(Group(name="test"))
