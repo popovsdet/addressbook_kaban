@@ -4,7 +4,7 @@ Application
 from selenium import webdriver
 
 from fixture.contact import Contact
-from fixture.grouphelper import GroupHelper
+from fixture.group import GroupHelper
 from fixture.session import Session
 
 

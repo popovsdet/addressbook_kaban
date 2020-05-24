@@ -46,5 +46,5 @@ def check_group():
     """
     Create a group if no one exists
     """
-    if not app_fixture.group.number():
+    if not app_fixture.group.count():
         app_fixture.group.create(Group(name="test"))

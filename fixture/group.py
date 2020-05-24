@@ -6,6 +6,8 @@ from model.group import Group
 
 
 class GroupHelper(object):
+    group_list_cache = None
+
     def __init__(self, app):
         """
         Init group's object
@@ -25,6 +27,7 @@ class GroupHelper(object):
         # Submit group creation
         self.app.driver.find_element_by_name("submit").click()
         self.open_groups_page()
+        self.group_list_cache = None
 
     def modify(self, group):
         """
@@ -39,6 +42,7 @@ class GroupHelper(object):
         # Submit modification
         self.app.driver.find_element_by_name("update").click()
         self.open_groups_page()
+        self.group_list_cache = None
 
     def delete(self):
         """
@@ -49,6 +53,7 @@ class GroupHelper(object):
         # submit deletion
         self.app.driver.find_element_by_xpath('//input[@name="delete"]').click()
         self.open_groups_page()
+        self.group_list_cache = None
 
     def select_first_group(self):
         """
@@ -65,7 +70,7 @@ class GroupHelper(object):
         self.change_field_value(field_name="group_header", text=group.header)
         self.change_field_value(field_name="group_footer", text=group.footer)
 
-    def number(self):
+    def count(self):
         """
         Number of groups on the page
         """
@@ -86,14 +91,16 @@ class GroupHelper(object):
         Get groups
         :return: list of groups
         """
-        self.open_groups_page()
-        group_list = []
-        groups = self.app.driver.find_elements_by_xpath('//input[@name="selected[]"]')
-        for group in groups:
-            name = group.get_attribute('title')[8:-1]
-            id = group.get_attribute('value')
-            group_list.append(Group(name=name, id=id))
-        return group_list
+        if self.group_list_cache is None:
+            self.open_groups_page()
+            self.group_list_cache = []
+            groups = self.app.driver.find_elements_by_xpath('//input[@name="selected[]"]')
+            for group in groups:
+                name = group.get_attribute('title')[8:-1]
+                id = group.get_attribute('value')
+                self.group_list_cache.append(Group(name=name, id=id))
+        # Return copy of cache using list()
+        return list(self.group_list_cache)
 
     # Common methods
     def change_field_value(self, field_name, text):

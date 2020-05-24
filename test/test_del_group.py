@@ -2,7 +2,7 @@ from model.group import Group
 
 
 # def test_delete_first_group(app):
-#     if not app.group.number():
+#     if not app.group.count():
 #         app.group.create(Group(name="test"))
 #
 #     old_groups = app.group.get_groups()
