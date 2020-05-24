@@ -4,7 +4,7 @@ Application
 from selenium import webdriver
 
 from fixture.contact import Contact
-from fixture.group import Group
+from fixture.grouphelper import GroupHelper
 from fixture.session import Session
 
 
@@ -19,7 +19,7 @@ class Application(object):
         self.driver = webdriver.Chrome()
         self.driver.implicitly_wait(1)
         self.session = Session(self)
-        self.group = Group(self)
+        self.group = GroupHelper(self)
         self.contact = Contact(self)
 
     def open_home_page(self):

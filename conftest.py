@@ -20,11 +20,8 @@ def app():
     :return: app fixture
     """
     global app_fixture
-    if not app_fixture:
+    if not app_fixture or not app_fixture.is_valid():
         app_fixture = Application()
-    else:
-        if not app_fixture.is_valid():
-            app_fixture = Application()
     app_fixture.session.ensure_login(username="admin", password="secret")
     return app_fixture
 

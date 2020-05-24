@@ -2,8 +2,10 @@
 Groups behavior
 """
 
+from model.group import Group
 
-class Group(object):
+
+class GroupHelper(object):
     def __init__(self, app):
         """
         Init group's object
@@ -78,6 +80,20 @@ class Group(object):
         if not (self.app.driver.current_url.endswith("/group.php") and
                 self.app.driver.find_elements_by_name("new")):
             self.app.driver.find_element_by_link_text("groups").click()
+
+    def get_groups(self):
+        """
+        Get groups
+        :return: list of groups
+        """
+        self.open_groups_page()
+        group_list = []
+        groups = self.app.driver.find_elements_by_xpath('//input[@name="selected[]"]')
+        for group in groups:
+            name = group.get_attribute('title')[8:-1]
+            id = group.get_attribute('value')
+            group_list.append(Group(name=name, id=id))
+        return group_list
 
     # Common methods
     def change_field_value(self, field_name, text):
