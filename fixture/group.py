@@ -29,13 +29,13 @@ class GroupHelper(object):
         self.open_groups_page()
         self.group_list_cache = None
 
-    def modify(self, group):
+    def modify(self, group, index):
         """
         Modify group
         :param group: group object
         """
         self.open_groups_page()
-        self.select_first_group()
+        self.select(index=index)
         # Click "Edit" button
         self.app.driver.find_element_by_xpath('//input[@name="edit"]').click()
         self.fill(group)
@@ -44,22 +44,22 @@ class GroupHelper(object):
         self.open_groups_page()
         self.group_list_cache = None
 
-    def delete(self):
+    def delete(self, index):
         """
         Delete group
         """
         self.open_groups_page()
-        self.select_first_group()
+        self.select(index)
         # submit deletion
         self.app.driver.find_element_by_xpath('//input[@name="delete"]').click()
         self.open_groups_page()
         self.group_list_cache = None
 
-    def select_first_group(self):
+    def select(self, index):
         """
         Select first group
         """
-        self.app.driver.find_element_by_xpath('//input[@name="selected[]"]').click()
+        self.app.driver.find_elements_by_xpath('//input[@name="selected[]"]')[index].click()
 
     def fill(self, group):
         """
