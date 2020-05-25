@@ -1,9 +1,12 @@
 """
 Contacts behavior
 """
+from model.contact import Contact
 
 
-class Contact(object):
+class ContactHelper(object):
+    contact_list_cache = None
+
     def __init__(self, app):
         self.app = app
 
@@ -17,40 +20,49 @@ class Contact(object):
         # Submit contact creation
         self.app.driver.find_element_by_xpath('//input[@name="submit"]').click()
         self.goto_home_page()
+        self.contact_list_cache = None
 
-    def modify(self, contact):
+    def modify(self, contact, index):
         """
         Modify contact
         :param contact: contact object
         """
         self.goto_home_page()
         # Go to edit contact page
-        self.app.driver.find_element_by_xpath('//img[@title="Edit"]').click()
+        self.goto_edit_page(index)
         self.fill_form(contact)
         # Submit contact modification
         self.app.driver.find_element_by_xpath('//input[@name="update"]').click()
         self.goto_home_page()
+        self.contact_list_cache = None
 
-    def delete(self):
+    def delete(self, index):
         """
         Delete contact
         """
         self.goto_home_page()
         # Select fist contact
-        self.app.driver.find_element_by_xpath('//input[@name="selected[]"]').click()
+        self.select(index)
         # Click "Delete" button
         self.app.driver.find_element_by_xpath('//input[@value="Delete"]').click()
         # Close the alert
         self.app.driver.switch_to_alert().accept()
         self.goto_home_page()
+        self.contact_list_cache = None
+
+    def select(self, index):
+        self.app.driver.find_elements_by_xpath('//input[@name="selected[]"]')[index].click()
+
+    def goto_edit_page(self, index):
+        self.app.driver.find_elements_by_xpath('//img[@title="Edit"]')[index].click()
 
     def fill_form(self, contact):
         """
         Fill contact form
         :param contact: contact object
         """
-        self.change_field_value(xpath='//input[@name="firstname"]', text=contact.fistname)
-        self.change_field_value(xpath='//input[@name="lastname"]', text=contact.lastname)
+        self.change_field_value(xpath='//input[@name="firstname"]', text=contact.first_name)
+        self.change_field_value(xpath='//input[@name="lastname"]', text=contact.last_name)
         self.change_field_value(xpath='//textarea[@name="address"]', text=contact.address)
         self.change_field_value(xpath='//input[@name="mobile"]', text=contact.mobile)
         self.change_field_value(xpath='//input[@name="email"]', text=contact.email)
@@ -65,7 +77,29 @@ class Contact(object):
         """
         Go to home page with contact list
         """
-        self.app.driver.find_element_by_xpath('//a[text()="home"]').click()
+        if not self.app.driver.current_url.endswith("addressbook/"):
+            self.app.driver.find_element_by_xpath('//a[text()="home"]').click()
+
+    def count(self):
+        """
+        Number of groups on the page
+        """
+        self.goto_home_page()
+        return len(self.app.driver.find_elements_by_xpath('//input[@name="selected[]"]'))
+
+    def get_contacts(self):
+        if self.contact_list_cache is None:
+            self.goto_home_page()
+            self.contact_list_cache = []
+            contacts = self.app.driver.find_elements_by_xpath('//input[@name="selected[]"]')
+            for contact in contacts:
+                name = contact.get_attribute('title')[8:-1].split()
+                fist_name = name[0]
+                last_name = name[1]
+                id = contact.get_attribute('value')
+                self.contact_list_cache.append(Contact(first_name=fist_name, last_name=last_name, id=id))
+        # Return copy of cache using list()
+        return list(self.contact_list_cache)
 
     # Common methods
     def change_field_value(self, xpath: str, text: str):

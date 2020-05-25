@@ -3,7 +3,7 @@ Application
 """
 from selenium import webdriver
 
-from fixture.contact import Contact
+from fixture.contact import ContactHelper
 from fixture.group import GroupHelper
 from fixture.session import Session
 
@@ -20,7 +20,7 @@ class Application(object):
         self.driver.implicitly_wait(1)
         self.session = Session(self)
         self.group = GroupHelper(self)
-        self.contact = Contact(self)
+        self.contact = ContactHelper(self)
 
     def open_home_page(self):
         """

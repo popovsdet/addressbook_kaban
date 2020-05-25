@@ -23,7 +23,7 @@ class GroupHelper(object):
         self.open_groups_page()
         # Init group creation
         self.app.driver.find_element_by_name("new").click()
-        self.fill(group)
+        self.fill_form(group)
         # Submit group creation
         self.app.driver.find_element_by_name("submit").click()
         self.open_groups_page()
@@ -38,7 +38,7 @@ class GroupHelper(object):
         self.select(index=index)
         # Click "Edit" button
         self.app.driver.find_element_by_xpath('//input[@name="edit"]').click()
-        self.fill(group)
+        self.fill_form(group)
         # Submit modification
         self.app.driver.find_element_by_name("update").click()
         self.open_groups_page()
@@ -61,7 +61,7 @@ class GroupHelper(object):
         """
         self.app.driver.find_elements_by_xpath('//input[@name="selected[]"]')[index].click()
 
-    def fill(self, group):
+    def fill_form(self, group):
         """
         Fill group form
         :param group: group object
@@ -83,12 +83,14 @@ class GroupHelper(object):
         Open groups page
         """
         if not (self.app.driver.current_url.endswith("/group.php") and
-                self.app.driver.find_elements_by_name("new")):
+                self.app.driver.find_element_by_name("new")):
             self.app.driver.find_element_by_link_text("groups").click()
 
     def get_groups(self):
         """
-        Get groups
+        Get groups list.
+        We use a class variable group_list_cache. If it is not empty, we continue to use it.
+        Otherwise we create and return it.
         :return: list of groups
         """
         if self.group_list_cache is None:
