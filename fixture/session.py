@@ -45,7 +45,7 @@ class Session(object):
         :param username: username
         :return: True if "username" present on the page, otherwise False
         """
-        return self.app.driver.find_element_by_xpath("//div/div[1]/form/b").text == "(" + username + ")"
+        return self.app.driver.find_element_by_xpath("//div/div[1]/form/b").text == f"({username})"
 
     def logout(self):
         """

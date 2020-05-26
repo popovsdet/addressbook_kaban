@@ -29,7 +29,7 @@ class ContactHelper(object):
         """
         self.goto_home_page()
         # Go to edit contact page
-        self.goto_edit_page(index)
+        self.open_edit_page(index)
         self.fill_form(contact)
         # Submit contact modification
         self.app.driver.find_element_by_xpath('//input[@name="update"]').click()
@@ -53,8 +53,25 @@ class ContactHelper(object):
     def select(self, index):
         self.app.driver.find_elements_by_xpath('//input[@name="selected[]"]')[index].click()
 
-    def goto_edit_page(self, index):
+    def open_edit_page(self, index):
+        self.goto_home_page()
         self.app.driver.find_elements_by_xpath('//img[@title="Edit"]')[index].click()
+
+    def get_contact_from_edit_page(self, index):
+        self.open_edit_page(index)
+        first_name = self.app.driver.find_element_by_xpath('//input[@name="firstname"]').get_attribute('value')
+        last_name = self.app.driver.find_element_by_xpath('//input[@name="lastname"]').get_attribute('value')
+        id = self.app.driver.find_element_by_xpath('//input[@name="id"]').get_attribute('value')
+        home_phone = self.app.driver.find_element_by_xpath('//input[@name="home"]').get_attribute('value')
+        work_phone = self.app.driver.find_element_by_xpath('//input[@name="work"]').get_attribute('value')
+        mobile_phone = self.app.driver.find_element_by_xpath('//input[@name="mobile"]').get_attribute('value')
+        secondary_phone = self.app.driver.find_element_by_xpath('//input[@name="phone2"]').get_attribute('value')
+        return Contact(first_name=first_name, last_name=last_name, id=id, home_phone=home_phone, work_phone=work_phone,
+                       mobile_phone=mobile_phone, secondary_phone=secondary_phone)
+
+    def open_view_page(self, index):
+        self.goto_home_page()
+        self.app.driver.find_elements_by_xpath('//img[@title="Details"]')[index].click()
 
     def fill_form(self, contact):
         """
@@ -64,7 +81,7 @@ class ContactHelper(object):
         self.change_field_value(xpath='//input[@name="firstname"]', text=contact.first_name)
         self.change_field_value(xpath='//input[@name="lastname"]', text=contact.last_name)
         self.change_field_value(xpath='//textarea[@name="address"]', text=contact.address)
-        self.change_field_value(xpath='//input[@name="mobile"]', text=contact.mobile)
+        self.change_field_value(xpath='//input[@name="mobile"]', text=contact.mobile_phone)
         self.change_field_value(xpath='//input[@name="email"]', text=contact.email)
 
     def init_new_contact(self):
@@ -87,17 +104,21 @@ class ContactHelper(object):
         self.goto_home_page()
         return len(self.app.driver.find_elements_by_xpath('//input[@name="selected[]"]'))
 
-    def get_contacts(self):
+    def get_contact_list(self):
         if self.contact_list_cache is None:
             self.goto_home_page()
             self.contact_list_cache = []
-            contacts = self.app.driver.find_elements_by_xpath('//input[@name="selected[]"]')
-            for contact in contacts:
-                name = contact.get_attribute('title')[8:-1].split()
-                fist_name = name[0]
-                last_name = name[1]
-                id = contact.get_attribute('value')
-                self.contact_list_cache.append(Contact(first_name=fist_name, last_name=last_name, id=id))
+            rows = self.app.driver.find_elements_by_xpath('//tr[@name="entry"]')
+            for row in rows:
+                cells = row.find_elements_by_xpath('td')
+                fist_name = cells[1].text
+                last_name = cells[2].text
+                id = cells[0].find_element_by_xpath('input').get_attribute('value')
+                # text.splitlines() == text.split('\n')
+                all_phones = cells[5].text.splitlines()
+                self.contact_list_cache.append(Contact(first_name=fist_name, last_name=last_name, id=id,
+                                                       home_phone=all_phones[0], mobile_phone=all_phones[1],
+                                                       work_phone=all_phones[2], secondary_phone=all_phones[3]))
         # Return copy of cache using list()
         return list(self.contact_list_cache)
 
