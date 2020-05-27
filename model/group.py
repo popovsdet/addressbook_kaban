@@ -13,7 +13,7 @@ class Group(object):
         Representation of our class when we print it (not as a place in the memory, but as a sting)
         :return: string with id and name of the group
         """
-        return f"id = '{self.id}': name = '{self.name}'"
+        return f"id = '{self.id}': name = '{self.name}': header = '{self.header}': footer = '{self.footer}'"
 
     def __eq__(self, other):
         """
