@@ -1,6 +1,8 @@
 """
 Contacts behavior
 """
+import re
+
 from model.contact import Contact
 
 
@@ -73,6 +75,16 @@ class ContactHelper(object):
         self.goto_home_page()
         self.app.driver.find_elements_by_xpath('//img[@title="Details"]')[index].click()
 
+    def get_contact_from_view_page(self, index):
+        self.open_view_page(index)
+        text = self.app.driver.find_element_by_id("content").text
+        home_phone = re.search("H: (.*)", text).group(1)
+        work_phone = re.search("W: (.*)", text).group(1)
+        mobile_phone = re.search("M: (.*)", text).group(1)
+        secondary_phone = re.search("P: (.*)", text).group(1)
+        return Contact(home_phone=home_phone, work_phone=work_phone,
+                       mobile_phone=mobile_phone, secondary_phone=secondary_phone)
+
     def fill_form(self, contact):
         """
         Fill contact form
@@ -114,11 +126,10 @@ class ContactHelper(object):
                 fist_name = cells[1].text
                 last_name = cells[2].text
                 id = cells[0].find_element_by_xpath('input').get_attribute('value')
-                # text.splitlines() == text.split('\n')
-                all_phones = cells[5].text.splitlines()
-                self.contact_list_cache.append(Contact(first_name=fist_name, last_name=last_name, id=id,
-                                                       home_phone=all_phones[0], mobile_phone=all_phones[1],
-                                                       work_phone=all_phones[2], secondary_phone=all_phones[3]))
+                all_phones = cells[5].text
+                self.contact_list_cache.append(
+                    Contact(first_name=fist_name, last_name=last_name, id=id, all_phones_home_page=all_phones))
+
         # Return copy of cache using list()
         return list(self.contact_list_cache)
 
