@@ -48,7 +48,7 @@ class ContactHelper(object):
         # Click "Delete" button
         self.app.driver.find_element_by_xpath('//input[@value="Delete"]').click()
         # Close the alert
-        self.app.driver.switch_to_alert().accept()
+        self.app.driver.switch_to.alert.accept()
         self.goto_home_page()
         self.contact_list_cache = None
 

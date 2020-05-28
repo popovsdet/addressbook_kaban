@@ -1,0 +1,52 @@
+1590630705743	geckodriver	INFO	Listening on 127.0.0.1:52066
+1590630706226	mozprofile::profile	INFO	Using profile path C:\Users\Yuri\AppData\Local\Temp\rust_mozprofile.u9yTFnasdLwx
+1590630706231	geckodriver::marionette	INFO	Starting browser C:\Program Files\Mozilla Firefox\firefox.exe
+1590630706330	geckodriver::marionette	INFO	Connecting to Marionette on localhost:52073
+1590630882750	geckodriver	INFO	Listening on 127.0.0.1:53078
+1590630883247	mozprofile::profile	INFO	Using profile path C:\Users\Yuri\AppData\Local\Temp\rust_mozprofile.HUqzIAKPcSUh
+1590630883252	geckodriver::marionette	INFO	Starting browser C:\Program Files\Mozilla Firefox\firefox.exe
+1590630883274	geckodriver::marionette	INFO	Connecting to Marionette on localhost:53086
+1590630883908	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
+1590630884059	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1590630884059	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1590630884060	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1590630884060	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1590630887784	Marionette	INFO	Listening on port 2828
+1590630912148	Marionette	INFO	Stopped listening on port 2828
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1590632412664	geckodriver	INFO	Listening on 127.0.0.1:61934
+1590632413134	mozprofile::profile	INFO	Using profile path C:\Users\Yuri\AppData\Local\Temp\rust_mozprofile.q01XiWFF4cMg
+1590632413139	geckodriver::marionette	INFO	Starting browser C:\Program Files\Mozilla Firefox\firefox.exe
+1590632413163	geckodriver::marionette	INFO	Connecting to Marionette on localhost:61949
+1590632414015	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
+1590632414796	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1590632414797	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1590632414797	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1590632414797	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1590632419665	Marionette	INFO	Listening on port 2828
+1590632432586	Marionette	INFO	Stopped listening on port 2828
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1590634635040	geckodriver	INFO	Listening on 127.0.0.1:58539
+1590634635531	mozprofile::profile	INFO	Using profile path C:\Users\Yuri\AppData\Local\Temp\rust_mozprofile.JlIoD7GmCEqJ
+1590634635537	geckodriver::marionette	INFO	Starting browser C:\Program Files\Mozilla Firefox\firefox.exe
+1590634635559	geckodriver::marionette	INFO	Connecting to Marionette on localhost:58548
+1590634636501	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
+1590634637111	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1590634637112	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1590634637112	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1590634637112	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1590634640483	Marionette	INFO	Listening on port 2828
+1590634648377	Marionette	INFO	Stopped listening on port 2828

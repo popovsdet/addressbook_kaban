@@ -10,7 +10,7 @@ app_fixture = None
 
 
 @pytest.fixture(scope="function")
-def app():
+def app(request):
     """
     Before each test method:
      1. Create an application fixture
@@ -20,8 +20,10 @@ def app():
     :return: app fixture
     """
     global app_fixture
+    browser = request.config.getoption("--browser")
+    base_url = request.config.getoption("--baseUrl")
     if not app_fixture or not app_fixture.is_valid():
-        app_fixture = Application()
+        app_fixture = Application(browser=browser, base_url=base_url)
     app_fixture.session.ensure_login(username="admin", password="secret")
     return app_fixture
 
@@ -48,3 +50,8 @@ def check_group():
     """
     if not app_fixture.group.count():
         app_fixture.group.create(Group(name="test"))
+
+
+def pytest_addoption(parser):
+    parser.addoption("--browser", action="store", default="chrome")
+    parser.addoption("--baseUrl", action="store", default="http://localhost/addressbook/")

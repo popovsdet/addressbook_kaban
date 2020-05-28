@@ -10,23 +10,31 @@ from fixture.session import Session
 
 class Application(object):
 
-    def __init__(self):
+    def __init__(self, browser, base_url):
         """
         1. Create instance of the Web Driver.
         2. Open new browser.
         3. Create instances of our classes.
         """
-        self.driver = webdriver.Chrome()
+        if browser == "firefox":
+            self.driver = webdriver.Firefox()
+        elif browser == "chrome":
+            self.driver = webdriver.Chrome()
+        elif browser == "edge":
+            self.driver = webdriver.Edge()
+        else:
+            raise ValueError(f"Unrecognized browser {browser}")
         self.driver.implicitly_wait(1)
         self.session = Session(self)
         self.group = GroupHelper(self)
         self.contact = ContactHelper(self)
+        self.base_url = base_url
 
     def open_home_page(self):
         """
         Open home page
         """
-        self.driver.get("http://localhost/addressbook/")
+        self.driver.get(self.base_url)
 
     def tear_down(self):
         """
