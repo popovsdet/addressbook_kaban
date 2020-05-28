@@ -83,7 +83,7 @@ class GroupHelper(object):
         Open groups page
         """
         if not (self.app.driver.current_url.endswith("/group.php") and
-                self.app.driver.find_element_by_name("new")):
+                self.app.driver.find_elements_by_name("new")):
             self.app.driver.find_element_by_link_text("groups").click()
 
     def get_groups(self):

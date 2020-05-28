@@ -7,19 +7,19 @@ from model.group import Group
 
 
 def random_sting(prefix, max_len):
-    symbols = string.ascii_letters + string.digits + " " * 10
+    symbols = string.ascii_letters + string.digits + string.punctuation + " " * 10
     return prefix + "".join([random.choice(symbols) for i in range(random.randrange(max_len))])
 
 
-# test_data = [Group(name="", header="", footer="")] + [
-#     Group(name=random_sting("name", 10), header=random_sting("header", 12), footer=random_sting("footer", 15))
-#     for i in range(5)]
+test_data = [Group(name="", header="", footer="")] + \
+            [Group(name=random_sting("name", 10), header=random_sting("header", 12), footer=random_sting("footer", 15))
+             for i in range(5)]
 
 
-test_data = [Group(name=name, header=header, footer=footer)
-             for name in ["", random_sting("name", 10)]
-             for header in ["", random_sting("header", 10)]
-             for footer in ["", random_sting("footer", 10)]]
+# test_data = [Group(name=name, header=header, footer=footer)
+#     for name in ["", random_sting("name", 10)]
+#     for header in ["", random_sting("header", 10)]
+#     for footer in ["", random_sting("footer", 10)]]
 
 
 @pytest.mark.parametrize("group", test_data, ids=[repr(x) for x in test_data])

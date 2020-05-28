@@ -14,5 +14,6 @@
 # print(fun("AAAA"))
 
 l = [0, 1, 2, 3, 4]
-l[1:2] = []
-print(l)
+l.append(76)
+
+print(l + [5])
