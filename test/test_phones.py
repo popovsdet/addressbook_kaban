@@ -22,6 +22,7 @@ def clear(s):
 
 def merge_phones_like_on_home_page(contact):
     """
+    # TODO: Check how it works
     1. Remove None phone numbers using filter().
     2. Clear each phone from "() -" using clear().
     3. Remove empty stings using filter().
@@ -34,7 +35,3 @@ def merge_phones_like_on_home_page(contact):
     clear_phones = map(lambda x: clear(x), remove_none_phones)
     remove_empty_phones = filter(lambda x: x != "", clear_phones)
     return "\n".join(remove_empty_phones)
-    # return "\n".join(filter(lambda x: x != "", map(lambda x: clear(x), filter(lambda x: x is not None,
-    #                                                                           [contact.home_phone, contact.work_phone,
-    #                                                                            contact.mobile_phone,
-    #                                                                            contact.secondary_phone]))))

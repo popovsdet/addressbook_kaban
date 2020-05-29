@@ -76,6 +76,7 @@ class ContactHelper(object):
         self.app.driver.find_elements_by_xpath('//img[@title="Details"]')[index].click()
 
     def get_contact_from_view_page(self, index):
+        # TODO: Check how it works
         self.open_view_page(index)
         text = self.app.driver.find_element_by_id("content").text
         home_phone = re.search("H: (.*)", text).group(1)
