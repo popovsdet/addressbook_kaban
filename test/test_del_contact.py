@@ -1,8 +1,7 @@
 from random import randrange
 
 
-def test_delete_first_contact(app):
-
+def test_delete_first_contact(app, add_first_contact):
     old_contact_list = app.contact.get_contact_list()
     index = randrange(len(old_contact_list))
     app.contact.delete(index=index)

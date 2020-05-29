@@ -16,15 +16,28 @@ class Contact(object):
         self.id = id
 
     def __repr__(self):
+        """
+        Console representation of the class
+        :return: str
+        """
         return f"id = '{self.id}': first_name = '{self.first_name}': last_name = '{self.last_name}': " \
                f"home_phone = '{self.home_phone}': mobile_phone = '{self.mobile_phone}'" \
                f": work_phone = '{self.work_phone}': secondary_phone = '{self.secondary_phone}'"
 
     def __eq__(self, other):
+        """
+        Rules of classes comparison
+        :param other: one of classes
+        :return: bool
+        """
         return (self.id is None or other.id is None or self.id == other.id) and \
                self.first_name == other.first_name and self.last_name == other.last_name
 
     def id_or_max(self):
+        """
+        Return ID or a very big number is ID is empty
+        :return:
+        """
         if self.id:
             return int(self.id)
         else:

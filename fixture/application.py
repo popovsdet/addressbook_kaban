@@ -10,11 +10,13 @@ from fixture.session import Session
 
 class Application(object):
 
-    def __init__(self, browser, base_url):
+    def __init__(self, browser: str, base_url: str):
         """
         1. Create instance of the Web Driver.
         2. Open new browser.
         3. Create instances of our classes.
+        :param browser: browser's name
+        :param base_url: base URL
         """
         if browser == "firefox":
             self.driver = webdriver.Firefox()

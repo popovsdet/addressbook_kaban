@@ -123,8 +123,8 @@ class ContactHelper(object):
             rows = self.app.driver.find_elements_by_xpath('//tr[@name="entry"]')
             for row in rows:
                 cells = row.find_elements_by_xpath('td')
-                fist_name = cells[1].text
-                last_name = cells[2].text
+                fist_name = cells[2].text
+                last_name = cells[1].text
                 id = cells[0].find_element_by_xpath('input').get_attribute('value')
                 all_phones = cells[5].text
                 self.contact_list_cache.append(
