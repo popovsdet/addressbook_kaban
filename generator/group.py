@@ -1,14 +1,16 @@
 import getopt
-import json
 import os
 import random
 import string
 import sys
 
+import jsonpickle
+
 from model.group import Group
 
+# read options from a command line
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "n:f:", ["number of groups", "file"])
+    opts, args = getopt.getopt(args=sys.argv[1:], shortopts="n:f:", longopts=["number of groups", "file"])
 except getopt.GetoptError as err:
     getopt.usage()
     sys.exit(2)
@@ -36,5 +38,8 @@ random_test_data = [Group(name="", header="", footer="")] + \
 path_to_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), f"../{f}")
 
 with open(path_to_file, "w") as file:
-    # json.dumps(random_test_data) convert data to json
-    file.write(json.dumps(random_test_data, default=lambda x: x.__dict__, indent=2))
+    # use a format option "json" to represent it in the file
+    jsonpickle.set_encoder_options("json", indent=2)
+    # in json file create a parameter with link to class file: "py/object": "model.group.Group"
+    # rest of parameters it stores too
+    file.write(jsonpickle.encode(random_test_data))

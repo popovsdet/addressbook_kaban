@@ -5,6 +5,7 @@ import importlib
 import json
 import os
 
+import jsonpickle
 import pytest
 
 from fixture.application import Application
@@ -28,15 +29,16 @@ def app(request):
     global app_fixture
     global target
     if not target:
-        path_to_file_from_option = request.config.getoption("--target")
+        target_file_from_option = request.config.getoption("--target")
         # __file__ is current file. conftest.py
         # 1. Get absolute path to current directory using os.path.abspath(__file__)
         # 2. Get name of this directory using directory_name = os.path.dirname(os.path.abspath(__file__)
-        # 3. Add a path to the file from option to this directory name using os.path.join(directory_name, path_to_file_from_option)
-        path_to_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), path_to_file_from_option)
-        # get data from target.json file ones
-        with open(path_to_file) as config_file:
-            target = json.load(config_file)
+        # 3. Add a path to the file from option to this directory name using os.path.join(directory_name, target_file_from_option)
+        path_to_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), target_file_from_option)
+        # open target.json file
+        with open(path_to_file) as target_file:
+            # read data from target.json file
+            target = json.load(target_file)
     if not app_fixture or not app_fixture.is_valid():
         # get option if we use hook pytest_addoption(parser) fist
         browser = request.config.getoption("--browser")
@@ -92,6 +94,16 @@ def pytest_addoption(parser):
 
 
 def pytest_generate_tests(metafunc):
+    """
+    1. From all fixtures get only fixtures which starts with "data_" and "json_".
+    2. Add parameters to this fixture: (fixture, test_data, ids=[str(x) for x in test_data]):
+        fixture: this fixture
+        test_data: iterable which we use in test
+        ids=[str(x) for x in test_data]: beautiful representation
+
+    :param metafunc:
+    :return:
+    """
     for fixture in metafunc.fixturenames:
         # Get file which starts with "data_"
         if fixture.startswith("data_"):
@@ -102,9 +114,20 @@ def pytest_generate_tests(metafunc):
             metafunc.parametrize(fixture, test_data, ids=[str(x) for x in test_data])
 
 
-
 def load_from_module(module):
     return importlib.import_module(f"data.{module}").constant_test_data
 
+
 def load_from_json(file):
-    pass
+    """
+    1. Get absolute path to current directory using os.path.abspath(__file__)
+    2. Get name of this directory using directory_name = os.path.dirname(os.path.abspath(__file__)
+    3. Add a path to the file from option to this directory name using os.path.join(directory_name, f"data/{file}.json")
+    4. Open and read the file.
+    5. Using jsonpickle.decode(f.read()) decode the file from json to objects
+
+    :param file:
+    :return:
+    """
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), f"data/{file}.json")) as f:
+        return jsonpickle.decode(f.read())
