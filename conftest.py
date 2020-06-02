@@ -95,39 +95,50 @@ def pytest_addoption(parser):
 
 def pytest_generate_tests(metafunc):
     """
+    Pytest runs this method automatically each time BEFORE FIXTURES and add parametrization to the fixtures
     1. From all fixtures get only fixtures which starts with "data_" and "json_".
     2. Add parameters to this fixture: (fixture, test_data, ids=[str(x) for x in test_data]):
         fixture: this fixture
         test_data: iterable which we use in test
         ids=[str(x) for x in test_data]: beautiful representation
 
-    :param metafunc:
-    :return:
+    :param metafunc: give you all info about a test (test function)
     """
+    # check all fixtures in a test (test function) and put their names in fixturenames()
+    # imetafunc.fixturenames looks like ['stop', 'app', 'json_contacts', 'request']
     for fixture in metafunc.fixturenames:
-        # Get file which starts with "data_"
+        # if fixture name starts with "data_" ...
         if fixture.startswith("data_"):
+            # we download data from module (file)
             test_data = load_from_module(fixture[5:])
+            # and put it as a parameter to this fixture
             metafunc.parametrize(fixture, test_data, ids=[str(x) for x in test_data])
         elif fixture.startswith("json_"):
             test_data = load_from_json(fixture[5:])
             metafunc.parametrize(fixture, test_data, ids=[str(x) for x in test_data])
 
 
-def load_from_module(module):
-    return importlib.import_module(f"data.{module}").constant_test_data
-
-
-def load_from_json(file):
+def load_from_module(module: str) -> list:
     """
+    Load data from particular python file (module) in directory "data"
+    :param module: name of the file
+    :return: list of objects
+    """
+    # return importlib.import_module(f"data.{module}").constant_test_data
+    return importlib.import_module(f"data.{module}").test_data
+
+
+def load_from_json(file: str) -> list:
+    """
+    Get data from particular json file in directory "data".
     1. Get absolute path to current directory using os.path.abspath(__file__)
     2. Get name of this directory using directory_name = os.path.dirname(os.path.abspath(__file__)
     3. Add a path to the file from option to this directory name using os.path.join(directory_name, f"data/{file}.json")
     4. Open and read the file.
     5. Using jsonpickle.decode(f.read()) decode the file from json to objects
 
-    :param file:
-    :return:
+    :param file: name of the file
+    :return: list of objects
     """
     with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), f"data/{file}.json")) as f:
         return jsonpickle.decode(f.read())

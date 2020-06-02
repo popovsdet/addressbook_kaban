@@ -1,5 +1,7 @@
 """
 Test data for contacts.
+We can take data directly from this file.
+Another option: use generator, create a json file and get data from it.
 """
 import random
 import string
@@ -26,3 +28,4 @@ constant_data = [Contact(first_name="first_name_1", last_name="last_name_1", add
                  Contact(first_name="first_name_2", last_name="last_name_2", address="address_2",
                          home_phone="home_phone_2", mobile_phone="mobile_phone_2", work_phone="work_phone_2",
                          secondary_phone="secondary_phone_2", email="email_2")]
+test_data = random_data

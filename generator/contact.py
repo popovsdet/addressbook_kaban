@@ -4,17 +4,18 @@ We have 2 options for a cmd:
 n - number of generated contacts
 f - file with that generated contacts
 t - type of test data: random
-Usage: "-n 10 -f data/contacts.json" or put it in "Parameters" in PyCharm. This file doesn't use pytest.
+Usage: "-n 3 -f data/contacts.json -t random" or put it in "Parameters" in PyCharm. This file doesn't use pytest.
 If cmd is empty, we use default values of "n" and "f"
 """
 # read options from a command line
 import getopt
-import json
 import os
 import random
 import string
 # get access to options of a command line
 import sys
+
+import jsonpickle
 
 from model.contact import Contact
 
@@ -74,6 +75,7 @@ else:
 file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", file_data)
 # open the file for writing
 with open(file, "w") as file_data:
-    # 1. Convert instance of Contact class to dict using default=lambda x: x.__dict__
-    # 2. Write json file using that dict. f.write(json.dumps)
-    file_data.write(json.dumps(test_data, default=lambda x: x.__dict__, indent=2))
+    # set parameter for encoding to json
+    jsonpickle.set_encoder_options("json", indent=2)
+    # take all data from object format and encode it to json
+    file_data.write(jsonpickle.encode(test_data))
