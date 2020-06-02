@@ -9,11 +9,21 @@ import jsonpickle
 import pytest
 
 from fixture.application import Application
+from fixture.db import DbFixture
 from model.contact import Contact
 from model.group import Group
 
 app_fixture = None
 target = None
+
+
+def load_config(file):
+    global target
+    if not target:
+        path_to_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), file)
+        with open(path_to_file) as target_file:
+            target = json.load(target_file)
+    return target
 
 
 @pytest.fixture(scope="function")
@@ -28,8 +38,9 @@ def app(request):
     """
     global app_fixture
     global target
+    target_file_from_option = request.config.getoption("--target")
+    web_config = load_config(target_file_from_option)["web"]
     if not target:
-        target_file_from_option = request.config.getoption("--target")
         # __file__ is current file. conftest.py
         # 1. Get absolute path to current directory using os.path.abspath(__file__)
         # 2. Get name of this directory using directory_name = os.path.dirname(os.path.abspath(__file__)
@@ -42,9 +53,23 @@ def app(request):
     if not app_fixture or not app_fixture.is_valid():
         # get option if we use hook pytest_addoption(parser) fist
         browser = request.config.getoption("--browser")
-        app_fixture = Application(browser=browser, base_url=target["baseUrl"])
-    app_fixture.session.ensure_login(username=target["username"], password=target["password"])
+        app_fixture = Application(browser=browser, base_url=web_config["baseUrl"])
+    app_fixture.session.ensure_login(username=web_config["username"], password=web_config["password"])
     return app_fixture
+
+
+@pytest.fixture(scope="session")
+def db(request):
+    target_file_from_option = request.config.getoption("--target")
+    db_config = load_config(target_file_from_option)["db"]
+    db_fixture = DbFixture(host=db_config["host"], name=db_config["name"], user=db_config["user"],
+                           password=db_config["password"])
+
+    def fin():
+        db_fixture.tear_down()
+
+    request.addfinalizer(fin)
+    return db_fixture
 
 
 @pytest.fixture(scope="session", autouse=True)

@@ -44,22 +44,28 @@ class GroupHelper(object):
         self.open_groups_page()
         self.group_list_cache = None
 
-    def delete(self, index):
+    def delete(self, index=0, id=0):
         """
         Delete group
         """
         self.open_groups_page()
-        self.select(index)
+        if index:
+            self.select(index=index)
+        elif id:
+            self.select(id=id)
         # submit deletion
         self.app.driver.find_element_by_xpath('//input[@name="delete"]').click()
         self.open_groups_page()
         self.group_list_cache = None
 
-    def select(self, index):
+    def select(self, index=0, id=0):
         """
-        Select first group
+        Select group by index or id
         """
-        self.app.driver.find_elements_by_xpath('//input[@name="selected[]"]')[index].click()
+        if index:
+            self.app.driver.find_elements_by_xpath('//input[@name="selected[]"]')[index].click()
+        elif id:
+            self.app.driver.find_element_by_css_selector(f'input[value="{id}"]').click()
 
     def fill_form(self, group):
         """
