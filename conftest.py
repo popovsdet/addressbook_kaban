@@ -86,6 +86,9 @@ def stop(request):
     # Run after last test
     request.addfinalizer(fin)
 
+@pytest.fixture(scope="function")
+def check_gui(request):
+    return request.config.getoption("--check_gui")
 
 @pytest.fixture(scope="function")
 def add_first_group():
@@ -108,14 +111,18 @@ def add_first_contact():
 # Hooks. Should be in conftest. Pytest check it automatically.
 def pytest_addoption(parser):
     """
-    Register command line options
+    Register command line options.
+    Use it as an "Additional Argument" in Pytest.
     :param parser: parser for command line.
     In parser we use method addoption() with parameters: "--browser"  which add option.
     addoption() add parameter from command line. After that we can get if from request.config.getoption("--browser")
-    action="store" means we save this parameter "--browser"
+    action="store" means we save this parameter
+    action="store_true" means if we use this parameter it becomes "True", if we don't use it becomes "False" by default
+        no need to add a value for this parameter. Just use it like "--check_gui"
     """
     parser.addoption("--browser", action="store", default="chrome")
     parser.addoption("--target", action="store", default="target.json")
+    parser.addoption("--check_gui", action="store_true")
 
 
 def pytest_generate_tests(metafunc):
