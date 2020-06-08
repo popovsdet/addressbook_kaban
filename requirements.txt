@@ -1,9 +1,7 @@
 pytest
-pytest_bdd
 selenium
 jsonpickle
 pony
 pymysql
+--allow-external mysql-connector-python
 mysql-connector-python
-pytest-allure-adaptor
-robotframework-python3

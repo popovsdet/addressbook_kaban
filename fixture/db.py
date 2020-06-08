@@ -10,8 +10,7 @@ class DbFixture:
         self.name = name
         self.user = user
         self.password = password
-        self.connection = mysql.connector.connect(host=self.host, database=self.name, user=self.user,
-                                                  password=self.password)
+        self.connection = mysql.connector.connect(host=host, database=name, user=user, password=password)
         self.connection.autocommit = True
 
     def get_groups(self) -> list:
@@ -32,7 +31,7 @@ class DbFixture:
 
     def get_contacts(self) -> list:
         """
-        Get list of contacts from DB
+        Get  list of contacts from DB
         :return: list
         """
         db_contact_list = []
